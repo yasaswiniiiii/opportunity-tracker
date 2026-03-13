@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Opportunity Tracker – Track internships, jobs and opportunities from Telegram, email and websites in one place." />
+  <title>Opportunity Tracker | Student Dashboard</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ========== SIDEBAR NAVIGATION ========== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon"><i class="fa-solid fa-rocket"></i></span>
+        <span class="logo-text">OpTracker</span>
+      </div>
+      <button class="sidebar-close" id="sidebarClose" aria-label="Close sidebar">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      
+      <ul>
+        <li>
+          <a href="#" class="nav-link active" data-page="dashboard" id="nav-dashboard">
+            <i class="fa-solid fa-gauge-high"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link" data-page="opportunities" id="nav-opportunities">
+            <i class="fa-solid fa-briefcase"></i>
+            <span>Opportunities</span>
+            <span class="badge" id="totalBadge">0</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link" data-page="search" id="nav-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Search & Filter</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link" data-page="calendar" id="nav-calendar">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>Deadlines</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link" data-page="add" id="nav-add">
+            <i class="fa-solid fa-plus-circle"></i>
+            <span>Add Opportunity</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="avatar">S</div>
+        <div>
+          <div class="user-name">Student</div>
+          <div class="user-role">Final Year</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <div class="main-wrapper">
+
+    <!-- Top Bar -->
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="topbar-title" id="pageTitle">Dashboard</div>
+      <div class="topbar-right">
+        <button class="icon-btn" id="refreshBtn" title="Refresh data">
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+        <div class="notification-btn" id="notifBtn" title="Deadlines approaching">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notif-dot" id="notifDot"></span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========== PAGE: DASHBOARD ========== -->
+    <section class="page active" id="page-dashboard">
+      <div class="page-content">
+        <div class="welcome-banner">
+          <div>
+            <h1>Welcome back! 👋</h1>
+            <p>Here's what's happening with your opportunities today.</p>
+          </div>
+          <div class="date-chip" id="todayDate"></div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card card-blue">
+            <div class="stat-icon"><i class="fa-solid fa-briefcase"></i></div>
+            <div>
+              <div class="stat-value" id="statTotal">0</div>
+              <div class="stat-label">Total Opportunities</div>
+            </div>
+          </div>
+          <div class="stat-card card-purple">
+            <div class="stat-icon"><i class="fa-solid fa-fire"></i></div>
+            <div>
+              <div class="stat-value" id="statUrgent">0</div>
+              <div class="stat-label">Deadline This Week</div>
+            </div>
+          </div>
+          <div class="stat-card card-green">
+            <div class="stat-icon"><i class="fa-brands fa-telegram"></i></div>
+            <div>
+              <div class="stat-value" id="statTelegram">0</div>
+              <div class="stat-label">From Telegram</div>
+            </div>
+          </div>
+          <div class="stat-card card-orange">
+            <div class="stat-icon"><i class="fa-solid fa-globe"></i></div>
+            <div>
+              <div class="stat-value" id="statWebsite">0</div>
+              <div class="stat-label">From Websites</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Opportunities -->
+        <div class="section-header">
+          <h2>Recent Opportunities</h2>
+          <a href="#" class="view-all" data-page="opportunities">View All →</a>
+        </div>
+        <div class="cards-grid" id="recentCards">
+          <div class="loader-spinner"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading…</div>
+        </div>
+
+        <!-- Upcoming Deadlines -->
+        <div class="section-header" style="margin-top:2rem;">
+          <h2>⚠️ Upcoming Deadlines</h2>
+        </div>
+        <div class="deadline-list" id="upcomingDeadlines">
+          <div class="loader-spinner"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading…</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PAGE: OPPORTUNITIES ========== -->
+    <section class="page" id="page-opportunities">
+      <div class="page-content">
+        <h1>All Opportunities</h1>
+        <p class="subtitle">Browse all tracked internships and job roles.</p>
+
+        <!-- Quick Filter Row -->
+        <div class="quick-filters">
+          <button class="filter-chip active" data-filter="all">All</button>
+          <button class="filter-chip" data-filter="Telegram">📱 Telegram</button>
+          <button class="filter-chip" data-filter="Website">🌐 Website</button>
+          <button class="filter-chip" data-filter="Manual">✍️ Manual</button>
+        </div>
+
+        <div class="cards-grid" id="allCards">
+          <div class="loader-spinner"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading…</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PAGE: SEARCH & FILTER ========== -->
+    <section class="page" id="page-search">
+      <div class="page-content">
+        <h1>Search & Filter</h1>
+        <p class="subtitle">Find the right opportunity fast.</p>
+
+        <!-- Search Bar -->
+        <div class="search-bar-wrap">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search by company, role, eligibility…" autocomplete="off" />
+          <button class="clear-btn" id="clearSearch" title="Clear"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <!-- Filter Panel -->
+        <div class="filter-panel">
+          <div class="filter-group">
+            <label for="filterRole">Role</label>
+            <select id="filterRole">
+              <option value="">All Roles</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filterSource">Source</label>
+            <select id="filterSource">
+              <option value="">All Sources</option>
+              <option value="Telegram">Telegram</option>
+              <option value="Website">Website</option>
+              <option value="Manual">Manual</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filterEligibility">Eligibility</label>
+            <select id="filterEligibility">
+              <option value="">All</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filterDeadline">Deadline Within</label>
+            <select id="filterDeadline">
+              <option value="">Any Time</option>
+              <option value="7">7 Days</option>
+              <option value="14">14 Days</option>
+              <option value="30">30 Days</option>
+            </select>
+          </div>
+          <button class="btn-primary" id="applyFilters">Apply Filters</button>
+          <button class="btn-outline" id="resetFilters">Reset</button>
+        </div>
+
+        <div class="search-results-info" id="searchResultsInfo"></div>
+        <div class="cards-grid" id="searchResults">
+          <div class="empty-state">
+            <i class="fa-solid fa-magnifying-glass-minus"></i>
+            <p>Start searching or apply filters above.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PAGE: CALENDAR ========== -->
+    <section class="page" id="page-calendar">
+      <div class="page-content">
+        <h1>Deadlines Calendar</h1>
+        <p class="subtitle">Stay ahead of every application deadline.</p>
+
+        <div class="calendar-wrapper">
+          <div class="cal-nav">
+            <button id="calPrev"><i class="fa-solid fa-chevron-left"></i></button>
+            <span id="calMonthYear"></span>
+            <button id="calNext"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+          <div class="cal-grid">
+            <div class="cal-day-header">Sun</div>
+            <div class="cal-day-header">Mon</div>
+            <div class="cal-day-header">Tue</div>
+            <div class="cal-day-header">Wed</div>
+            <div class="cal-day-header">Thu</div>
+            <div class="cal-day-header">Fri</div>
+            <div class="cal-day-header">Sat</div>
+          </div>
+          <div class="cal-body" id="calBody"></div>
+        </div>
+
+        <div class="section-header" style="margin-top:2rem;">
+          <h2 id="selectedDateLabel">Deadlines</h2>
+        </div>
+        <div id="calDeadlineList" class="deadline-list">
+          <p class="no-data">Click a date to see deadlines.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PAGE: ADD OPPORTUNITY ========== -->
+    <section class="page" id="page-add">
+      <div class="page-content">
+        <h1>Add Opportunity</h1>
+        <p class="subtitle">Manually enter a new opportunity or simulate a Telegram message.</p>
+
+        <div class="add-tabs">
+          <button class="tab-btn active" data-tab="manual">✍️ Manual Form</button>
+          <button class="tab-btn" data-tab="telegram">📱 Simulate Telegram</button>
+        </div>
+
+        <!-- Manual Form -->
+        <div class="tab-content active" id="tab-manual">
+          <form class="add-form" id="addForm" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fc-company">Company Name <span class="req">*</span></label>
+                <input type="text" id="fc-company" placeholder="e.g. Google" required />
+              </div>
+              <div class="form-group">
+                <label for="fc-role">Role <span class="req">*</span></label>
+                <input type="text" id="fc-role" placeholder="e.g. Software Engineer Intern" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fc-eligibility">Eligibility</label>
+                <input type="text" id="fc-eligibility" placeholder="e.g. B.Tech 3rd Year, 7.5 CGPA" />
+              </div>
+              <div class="form-group">
+                <label for="fc-deadline">Application Deadline <span class="req">*</span></label>
+                <input type="date" id="fc-deadline" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fc-applyLink">Apply Link</label>
+                <input type="url" id="fc-applyLink" placeholder="https://careers.company.com/apply" />
+              </div>
+              <div class="form-group">
+                <label for="fc-source">Source</label>
+                <select id="fc-source">
+                  <option value="Manual">Manual</option>
+                  <option value="Telegram">Telegram</option>
+                  <option value="Website">Website</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group full-width">
+              <label for="fc-description">Description</label>
+              <textarea id="fc-description" rows="4" placeholder="Paste the full opportunity description here…"></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn-primary" id="submitBtn">
+                <i class="fa-solid fa-plus"></i> Add Opportunity
+              </button>
+              <button type="reset" class="btn-outline">Clear Form</button>
+            </div>
+            <div class="form-msg" id="formMsg"></div>
+          </form>
+        </div>
+
+        <!-- Simulate Telegram -->
+        <div class="tab-content" id="tab-telegram">
+          <div class="telegram-sim">
+            <div class="tg-header">
+              <i class="fa-brands fa-telegram"></i>
+              <span>Simulate Telegram Message</span>
+            </div>
+            <p class="tg-info">Paste a raw Telegram-style notification message. The pipeline will extract structured fields automatically.</p>
+            <textarea id="tgInput" rows="8" placeholder="Paste a raw opportunity message here…&#10;&#10;Example:&#10;🚀 Google is hiring Software Engineer Interns!&#10;Role: Software Engineer Intern&#10;Eligibility: B.Tech / B.E (CS/IT), 7+ CGPA&#10;Deadline: March 25, 2026&#10;Apply: https://careers.google.com/jobs/..."></textarea>
+            <button class="btn-primary" id="parseTgBtn">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Extract & Add
+            </button>
+            <div class="tg-preview" id="tgPreview" style="display:none;">
+              <h3>Extracted Fields</h3>
+              <div id="tgPreviewContent"></div>
+              <button class="btn-primary" id="confirmTgBtn">✅ Confirm & Save</button>
+            </div>
+            <div class="form-msg" id="tgMsg"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== MODAL: OPPORTUNITY DETAILS ========== -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal" id="detailModal">
+        <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-content" id="modalContent"></div>
+      </div>
+    </div>
+
+    <!-- ========== TOAST ========== -->
+    <div class="toast" id="toast"></div>
+
+  </div><!-- end main-wrapper -->
+
+  <script src="script.js"></script>
+</body>
+</html>
